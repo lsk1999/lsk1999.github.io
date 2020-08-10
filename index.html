@@ -152,39 +152,40 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-HashMap和Hashtable的区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/08/10/hello-world/">Hello World</a>
+      <a class="article-title" href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/">HashMap和Hashtable的区别</a>
     </h1>
   
 
         
-        <a href="/2020/08/10/hello-world/" class="archive-article-date">
-  	<time datetime="2020-08-10T01:34:25.431Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+        <a href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+        <pre><code>                              HashMap和Hashtable的区别    </code></pre>
+<p>1、线程安全<br>两者最主要的区别在于Hashtable是线程安全，而HashMap则非线程安全。</p>
+<p>Hashtable的实现方法里面都添加了synchronized关键字来确保线程同步，因此相对而言HashMap性能会高一些，我们平时使用时若无特殊需求建议使用HashMap，在多线程环境下若使用HashMap需要使用Collections.synchronizedMap()方法来获取一个线程安全的集合。</p>
+<p>Note：</p>
+<p>Collections.synchronizedMap()实现原理是Collections定义了一个SynchronizedMap的内部类，这个类实现了Map接口，在调用方法时使用synchronized来保证线程同步,当然了实际上操作的还是我们传入的HashMap实例，简单的说就是Collections.synchronizedMap()方法帮我们在操作HashMap时自动添加了synchronized来实现线程同步，类似的其它Collections.synchronizedXX方法也是类似原理。</p>
+<p>2、针对null的不同<br>HashMap可以使用null作为key，而Hashtable则不允许null作为key<br>虽说HashMap支持null值作为key，不过建议还是尽量避免这样使用，因为一旦不小心使用了，若因此引发一些问题，排查起来很是费事。<br>Note：HashMap以null作为key时，总是存储在table数组的第一个节点上。</p>
+<p>3、继承结构<br>HashMap是对Map接口的实现，HashTable实现了Map接口和Dictionary抽象类。</p>
+<p>4、初始容量与扩容<br>HashMap的初始容量为16，Hashtable初始容量为11，两者的填充因子默认都是0.75。</p>
+<p>HashMap扩容时是当前容量翻倍即:capacity<em>2，Hashtable扩容时是容量翻倍+1即:capacity</em>2+1。</p>
+<p>5、两者计算hash的方法不同<br>Hashtable计算hash是直接使用key的hashcode对table数组的长度直接进行取模</p>
+<p>int hash = key.hashCode();<br>int index = (hash &amp; 0x7FFFFFFF) % tab.length;<br>HashMap计算hash对key的hashcode进行了二次hash，以获得更好的散列值，然后对table数组长度取摸。</p>
+<p>int hash = hash(key.hashCode());<br>int i = indexFor(hash, table.length);</p>
+<p>static int hash(int h) {<br>        // This function ensures that hashCodes that differ only by<br>        // constant multiples at each bit position have a bounded<br>        // number of collisions (approximately 8 at default load factor).<br>        h ^= (h &gt;&gt;&gt; 20) ^ (h &gt;&gt;&gt; 12);<br>        return h ^ (h &gt;&gt;&gt; 7) ^ (h &gt;&gt;&gt; 4);<br>    }</p>
+<p> static int indexFor(int h, int length) {</p>
 
       
 
@@ -197,7 +198,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/08/10/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/">展开全文 >></a>
         </p>
       
 
@@ -227,6 +228,935 @@
 
 
   
+    <article id="post-MySQL优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/">数据库优化</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于数据库优化，网上有不少资料和方法，但是不少质量参差不齐，有些总结的不够到位，内容冗杂。<br>　　偶尔发现了这篇文章，总结得很经典，文章流量也很大，所以拿到自己的总结文集中，积累优质文章，提升个人能力，希望对大家今后开发中也有帮助</p>
+<p>1、选取最适用的字段属性<br>MySQL可以很好的支持大数据量的存取，但是一般说来，数据库中的表越小，在它上面执行的查询也就会越快。因此，在创建表的时候，为了获得更好的性能，我们可以将表中字段的宽度设得尽可能小。</p>
+<p>例如，在定义邮政编码这个字段时，如果将其设置为CHAR(255),显然给数据库增加了不必要的空间，甚至使用VARCHAR这种类型也是多余的，因为CHAR(6)就可以很好的完成任务了。同样的，如果可以的话，我们应该使用MEDIUMINT而不是BIGIN来定义整型字段。</p>
+<p>另外一个提高效率的方法是在可能的情况下，应该尽量把字段设置为NOT NULL，这样在将来执行查询的时候，数据库不用去比较NULL值。</p>
+<p>对于某些文本字段，例如“省份”或者“性别”，我们可以将它们定义为ENUM类型。因为在MySQL中，ENUM类型被当作数值型数据来处理，而数值型数据被处理起来的速度要比文本类型快得多。这样，我们又可以提高数据库的性能。</p>
+<p>2、使用连接（JOIN）来代替子查询(Sub-Queries)<br>MySQL从4.1开始支持SQL的子查询。这个技术可以使用SELECT语句来创建一个单列的查询结果，然后把这个结果作为过滤条件用在另一个查询中。例如，我们要将客户基本信息表中没有任何订单的客户删除掉，就可以利用子查询先从销售信息表中将所有发出订单的客户ID取出来，然后将结果传递给主查询，如下所示：</p>
+<p>DELETE  FROM  customerinfo</p>
+<p>WHERE  CustomerID  NOT  in  (SELECT customerid  FROM  salesinfo)<br>使用子查询可以一次性的完成很多逻辑上需要多个步骤才能完成的SQL操作，同时也可以避免事务或者表锁死，并且写起来也很容易。但是，有些情况下，子查询可以被更有效率的连接（JOIN）..替代。例如，假设我们要将所有没有订单记录的用户取出来，可以用下面这个查询完成：</p>
+<p>SELECT  *  FROM  customerinfo</p>
+<p>WHERE  customerid  NOT IN (SELECT customerid   FROM   salesinfo)<br>如果使用连接（JOIN）..来完成这个查询工作，速度将会快很多。尤其是当salesinfo表中对CustomerID建有索引的话，性能将会更好，查询如下：</p>
+<p>SELECT  *  FROM  customerinfo</p>
+<p>LEFT  JOIN  salesinfo  ON   customerinfo.customerid =salesinfo.customerid</p>
+<p>WHERE  salesinfo.customerid   IS NULL<br>连接（JOIN）..之所以更有效率一些，是因为MySQL不需要在内存中创建临时表来完成这个逻辑上的需要两个步骤的查询工作。</p>
+<p>3、使用联合(UNION)来代替手动创建的临时表<br>MySQL从4.0的版本开始支持union查询，它可以把需要使用临时表的两条或更多的select查询合并的一个查询中。在客户端的查询会话结束的时候，临时表会被自动删除，从而保证数据库整齐、高效。使用union来创建查询的时候，我们只需要用UNION作为关键字把多个select语句连接起来就可以了，要注意的是所有select语句中的字段数目要想同。下面的例子就演示了一个使用UNION的查询。</p>
+<p>SELECT   name,phone  FROM  client UNION</p>
+<p>SELECT  name,birthdate  FROM  author  UNION</p>
+<p>SELECT  name,supplier FROM product<br>4、事务<br>尽管我们可以使用子查询（Sub-Queries）、连接（JOIN）和联合（UNION）来创建各种各样的查询，但不是所有的数据库操作都可以只用一条或少数几条SQL语句就可以完成的。更多的时候是需要用到一系列的语句来完成某种工作。但是在这种情况下，当这个语句块中的某一条语句运行出错的时候，整个语句块的操作就会变得不确定起来。设想一下，要把某个数据同时插入两个相关联的表中，可能会出现这样的情况：第一个表中成功更新后，数据库突然出现意外状况，造成第二个表中的操作没有完成，这样，就会造成数据的不完整，甚至会破坏数据库中的数据。要避免这种情况，就应该使用事务，它的作用是：要么语句块中每条语句都操作成功，要么都失败。换句话说，就是可以保持数据库中数据的一致性和完整性。事物以BEGIN关键字开始，COMMIT关键字结束。在这之间的一条SQL操作失败，那么，ROLLBACK命令就可以把数据库恢复到BEGIN开始之前的状态。</p>
+<p>BEGIN;<br>  INSERT   INTO   salesinfo   SET   customerid=14;<br>  UPDATE   inventory   SET   quantity =11   WHERE   item=’book’;<br>COMMIT;<br>事务的另一个重要作用是当多个用户同时使用相同的数据源时，它可以利用锁定数据库的方法来为用户提供一种安全的访问方式，这样可以保证用户的操作不被其它的用户所干扰。</p>
+<p>5、锁定表<br>尽管事务是维护数据库完整性的一个非常好的方法，但却因为它的独占性，有时会影响数据库的性能，尤其是在很大的应用系统中。由于在事务执行的过程中，数据库将会被锁定，因此其它的用户请求只能暂时等待直到该事务结束。如果一个数据库系统只有少数几个用户来使用，事务造成的影响不会成为一个太大的问题；但假设有成千上万的用户同时访问一个数据库系统，例如访问一个电子商务网站，就会产生比较严重的响应延迟。</p>
+<p>其实，有些情况下我们可以通过锁定表的方法来获得更好的性能。下面的例子就用锁定表的方法来完成前面一个例子中事务的功能。</p>
+<p>LOCK TABLE inventory WRITE SELECT quantity  FROM   inventory   WHERE Item=’book’;</p>
+<p>…</p>
+<p>UPDATE   inventory   SET   Quantity=11   WHERE  Item=’book’;UNLOCKTABLES<br>这里，我们用一个select语句取出初始数据，通过一些计算，用update语句将新值更新到表中。包含有WRITE关键字的LOCKTABLE语句可以保证在UNLOCKTABLES命令被执行之前，不会有其它的访问来对inventory进行插入、更新或者删除的操作。</p>
+<p>6、使用外键<br>锁定表的方法可以维护数据的完整性，但是它却不能保证数据的关联性。这个时候我们就可以使用外键。</p>
+<p>例如，外键可以保证每一条销售记录都指向某一个存在的客户。在这里，外键可以把customerinfo表中的customerid映射到salesinfo表中customerid，任何一条没有合法customerid的记录都不会被更新或插入到salesinfo中。</p>
+<p>CREATE  TABLE   customerinfo( customerid   int primary key) engine = innodb;</p>
+<p>CREATE  TABLE   salesinfo( salesid int not null,customerid  int not null, primary key(customerid,salesid),foreign key(customerid)  references  customerinfo(customerid) on delete cascade)engine = innodb;</p>
+<p>注意例子中的参数“on delete cascade”。该参数保证当customerinfo表中的一条客户记录被删除的时候，salesinfo表中所有与该客户相关的记录也会被自动删除。如果要在MySQL中使用外键，一定要记住在创建表的时候将表的类型定义为事务安全表InnoDB类型。该类型不是MySQL表的默认类型。定义的方法是在CREATE TABLE语句中加上engine=INNODB。如例中所示。</p>
+<p>7、使用索引<br>索引是提高数据库性能的常用方法，它可以令数据库服务器以比没有索引快得多的速度检索特定的行，尤其是在查询语句当中包含有MAX(),MIN()和ORDERBY这些命令的时候，性能提高更为明显。</p>
+<p>那该对哪些字段建立索引呢？</p>
+<p>一般说来，索引应建立在那些将用于JOIN,WHERE判断和ORDERBY排序的字段上。尽量不要对数据库中某个含有大量重复的值的字段建立索引。对于一个ENUM类型的字段来说，出现大量重复值是很有可能的情况</p>
+<p>例如customerinfo中的“province”..字段，在这样的字段上建立索引将不会有什么帮助；相反，还有可能降低数据库的性能。我们在创建表的时候可以同时创建合适的索引，也可以使用ALTERTABLE或CREATEINDEX在以后创建索引。此外，MySQL从版本3.23.23开始支持全文索引和搜索。全文索引在MySQL中是一个FULLTEXT类型索引，但仅能用于MyISAM类型的表。对于一个大的数据库，将数据装载到一个没有FULLTEXT索引的表中，然后再使用ALTERTABLE或CREATEINDEX创建索引，将是非常快的。但如果将数据装载到一个已经有FULLTEXT索引的表中，执行过程将会非常慢。</p>
+<p>8、优化的查询语句<br>绝大多数情况下，使用索引可以提高查询的速度，但如果SQL语句使用不恰当的话，索引将无法发挥它应有的作用。</p>
+<p>下面是应该注意的几个方面。</p>
+<p>a、 首先，最好是在相同类型的字段间进行比较的操作</p>
+<p>在MySQL3.23版之前，这甚至是一个必须的条件。例如不能将一个建有索引的INT字段和BIGINT字段进行比较；但是作为特殊的情况，在CHAR类型的字段和VARCHAR类型字段的字段大小相同的时候，可以将它们进行比较。</p>
+<p>b、 其次，在建有索引的字段上尽量不要使用函数进行操作</p>
+<p>例如，在一个DATE类型的字段上使用YEAE()函数时，将会使索引不能发挥应有的作用。所以，下面的两个查询虽然返回的结果一样，但后者要比前者快得多。</p>
+<p>ｃ、第三，在搜索字符型字段时，我们有时会使用LIKE关键字和通配符，这种做法虽然简单，但却也是以牺牲系统性能为代价的</p>
+<p>例如下面的查询将会比较表中的每一条记录。</p>
+<p>SELECT  *  FROM  books  WHERE  name  like   “MySQL%”</p>
+<p>但是如果换用下面的查询，返回的结果一样，但速度就要快上很多：</p>
+<p>SELECT  *  FROM  books  WHERE  name ＞=  “MySQL”  and  name  ＜”MySQM”<br>最后，应该注意避免在查询中让MySQL进行自动类型转换，因为转换过程也会使索引变得不起作用</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-NoSql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/NoSql/">nosql</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/NoSql/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、nosql的简介</p>
+<p>   Nosql的全称是Not Only Sql，这个概念早起就有人提出，<br>而我们常用的都是关系型数据库。就像我们常用的mysql，sqlserver一样，<br>这些数据库一般用来存储重要信息，应对普通的业务是没有问题的。<br>但是，随着互联网的高速发展，传统的关系型数据库在应付超大规模，<br>超大流量以及高并发的时候力不从心。而就在这个时候，Nosql得到的告诉的发展。<br>1<br>2<br>3<br>4<br>5<br>6<br>二、Nosql和关系型数据库的区别<br>1.存储方式</p>
+<p>　　关系型数据库是表格式的，因此存储在表的行和列中。他们之间很容易关联协作存储，<br>通常存储在数据集中，就像文档、键值对或者图结构。<br>1<br>2<br>2.存储结构</p>
+<p>关系型数据库对应的是结构化数据，数据表都预先定义了结构（列的定义），<br>结构描述了数据的形式和内容。这一点对数据建模至关重要，<br>虽然预定义结构带来了可靠性和稳定性，但是修改这些数据比较困难。<br>而Nosql数据库基于动态结构，使用与非结构化数据。<br>因为Nosql数据库是动态结构，可以很容易适应数据类型和结构的变化。<br>1<br>2<br>3<br>4<br>5<br>3.存储规范</p>
+<p>关系型数据库的数据存储为了更高的规范性，把数据分割为最小的关系表以避免重复，<br>获得精简的空间利用。虽然管理起来很清晰，但是单个操作设计到多张表的时候，<br>数据管理就显得有点麻烦。而Nosql数据存储在平面数据集中，<br>数据经常可能会重复。单个数据库很少被分隔开，而是存储成了一个整体，<br>这样整块数据更加便于读写<br>1<br>2<br>3<br>4<br>5<br>4.存储扩展</p>
+<p>这可能是两者之间最大的区别，关系型数据库是纵向扩展，也就是说想要提高处理能力，<br>要使用速度更快的计算机。因为数据存储在关系表中，操作的性能瓶颈可能涉及到多个表，<br>需要通过提升计算机性能来克服。虽然有很大的扩展空间，<br>但是最终会达到纵向扩展的上限。而Nosql数据库是横向扩展的，<br>它的存储天然就是分布式的，可以通过给资源池添加更多的普通数据库服务器来分担负载。<br>1<br>2<br>3<br>4<br>5<br>5.查询方式</p>
+<p>关系型数据库通过结构化查询语言来操作数据库（就是我们通常说的SQL）。<br>SQL支持数据库CURD操作的功能非常强大，是业界的标准用法。<br>而Nosql查询以块为单元操作数据，使用的是非结构化查询语言（UnQl），<br>它是没有标准的。关系型数据库表中主键的概念对应Nosql中存储文档的ID。<br>关系型数据库使用预定义优化方式（比如索引）来加快查询操作，<br>而Nosql更简单更精确的数据访问模式。<br>1<br>2<br>3<br>4<br>5<br>6<br>6.事务</p>
+<p>　关系型数据库遵循ACID规则（原子性(Atomicity)、一致性(Consistency)、<br>（基本可用（Basically Availble）、软/柔性事务（Soft-state ）、最终一致性（Eventual Consistency））。由于关系型数据库的数据强一致性，<br>所以对事务的支持很好。关系型数据库支持对事务原子性细粒度控制，<br>并且易于回滚事务。而Nosql数据库是在CAP（一致性、可用性、分区容忍度）中任选两项，因为基于节点的分布式系统中，很难全部满足，所以对事务的支持不是很好，<br>虽然也可以使用事务，但是并不是Nosql的闪光点。<br>1<br>2<br>3<br>4<br>5<br>7.性能</p>
+<p>　关系型数据库为了维护数据的一致性付出了巨大的代价，读写性能比较差。<br>而Nosql存储的格式都是key-value类型的，并且存储在内存中，非常容易存储，<br>而且对于数据的 一致性是 弱要求。Nosql无需sql的解析，提高了读写性能。<br>1<br>2<br>3<br>8.授权方式
+　</p>
+<p>　关系型数据库通常有SQL Server，Mysql，Oracle。主流的Nosql数据库有redis，<br>成本较大，而Nosql数据库通常都是开源的。<br>1<br>2<br>三、为什么使用NoSQL ?</p>
+<p>今天我们可以通过第三方平台（如：Google,Facebook等）可以很容易的访问和抓取数据。<br>用户的个人信息，社交网络，地理位置，用户生成的数据和用户操作日志已经成倍的增加。<br>我们如果要对这些用户数据进行挖掘，那SQL数据库已经不适合这些应用了,<br> NoSQL数据库的发展也却能很好的处理这些大的数据</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/NoSql/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-SpringAop" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/SpringAop/">AOP分析</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/SpringAop/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>                                  AOP学习</code></pre>
+<p>切面（Aspect） ：官方的抽象定义为“一个关注点的模块化，这个关注点可能会横切多个对象”。<br>连接点（Joinpoint） ：程序执行过程中的某一行为。<br>通知（Advice） ：“切面”对于某个“连接点”所产生的动作。<br>切入点（Pointcut） ：匹配连接点的断言，在AOP中通知和一个切入点表达式关联。<br>目标对象（Target Object） ：被一个或者多个切面所通知的对象。<br>AOP代理（AOP Proxy） 在Spring AOP中有两种代理方式，JDK动态代理和CGLIB代理。</p>
+<p>通知（Advice）类型<br>前置通知（Before advice） ：在某连接点（JoinPoint）之前执行的通知，但这个通知不能阻止连接点前的执行。ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:before">aop:before</a>元素进行声明。<br>后通知（After advice） ：当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:after">aop:after</a>元素进行声明。<br>返回后通知（After return advice） ：在某连接点正常完成后执行的通知，不包括抛出异常的情况。ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<after-returning>元素进行声明。<br>环绕通知（Around advice） ：包围一个连接点的通知，类似Web中Servlet规范中的Filter的doFilter方法。可以在方法的调用前后完成自定义的行为，也可以选择不执行。ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:around">aop:around</a>元素进行声明。<br>抛出异常后通知（After throwing advice） ： 在方法抛出异常退出时执行的通知。 ApplicationContext中在<a href="aop:aspect">aop:aspect</a>里面使用<a href="aop:after-throwing">aop:after-throwing</a>元素进行声明。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/SpringAop/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-http" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/http/">http</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/http/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、Web页面生成原理<br>        当我们在浏览器的地址栏中输入网址，然后点击回车，接着，浏览器就会呈现出我们需要的web界面，那么，这个界面是怎么产生的？web的界面是根据我们输入的URL（网址、地址），浏览器从服务器端获取对应的文件资源等信息，然后显示在浏览器上面。像这种通过发送请求获取服务器资源的web浏览器等，都可以称之为客户端（client）。</p>
+<pre><code>    Web 使用一种名为 HTTP（HyperText Transfer Protocol）的协议作为规范，完成从客户端到服务器端等一系列运作流程。而协议是指规则的约定。可以说，Web 是建立在 HTTP 协议上通信的。
+
+    HTTP使用的是可靠的数据传输协议，因此即使数据来自地球的另一端，它也能确保数据在传输的过程中不会被损坏或产生混乱，用户在访问信息的时候不用担心其完整性。</code></pre>
+<p>二、Web资源<br>1、MIME类型<br>        网络上有着数千种不同的数据类型，HTTP仔细地给每种要通过Web传输的对象都打上了名为MIME类型的数据格式标签。<br>        MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。<br>        MIME类型是一种文本标记，表示一种主要的对象类型和一个特殊的子类型，中间由一条斜杠分隔。例如：HTML格式的文本文档是text/html，GIF格式的图片是image/gif<br>        当Web浏览器从服务器中取回一个对象时，会去查看相关的MIME类型，看看是否知道如何处理这个对象，大多数浏览器都可以处理数百种常见的对象类型，或者运行外部插件软件来处理特殊格式的数据。<br>        常用Mime类型：</p>
+<p>文件后缀</p>
+<p>Mime类型</p>
+<p>说明</p>
+<p>.flv</p>
+<p>flv/flv-flash </p>
+<p>在线播放</p>
+<p>.html或.htm </p>
+<p>text/html </p>
+<p>超文本标记语言文本</p>
+<p>.rtf </p>
+<p>application/rtf</p>
+<p>RTF文本</p>
+<p>.gif </p>
+<p>image/gif</p>
+<p>GIF图形</p>
+<p>.jpeg或.jpg </p>
+<p>image/jpeg</p>
+<p>JPEG图形</p>
+<p>.au</p>
+<p>audio/basic </p>
+<p>au声音文件</p>
+<p>.mid或.midi</p>
+<p>audio/midi或audio/x-midi</p>
+<p>MIDI音乐文件</p>
+<p>.ra或.ram或.rm </p>
+<p>audio/x-pn-realaudio</p>
+<p>RealAudio音乐文件</p>
+<p>.mpg或.mpeg或.mp3 </p>
+<p>video/mpeg</p>
+<p>MPEG文件</p>
+<p>.avi </p>
+<p>video/x-msvideo</p>
+<p>AVI文件</p>
+<p>.gz</p>
+<p>application/x-gzip</p>
+<p>GZIP文件</p>
+<p>.tar</p>
+<p>application/x-tar </p>
+<p>TAR文件</p>
+<p>.exe </p>
+<p>application/octet-stream</p>
+<p>下载文件类型</p>
+<p>.rmvb </p>
+<p>video/vnd.rn-realvideo </p>
+<p>在线播放</p>
+<p>.txt </p>
+<p>text/plain</p>
+<p>普通文本</p>
+<p>.mrp </p>
+<p>application/octet-stream </p>
+<p>MRP文件（国内普遍的手机）</p>
+<p>.ipa</p>
+<p>application/iphone-package-archive</p>
+<p>IPA文件(IPHONE)</p>
+<p>.deb </p>
+<p>application/x-debian-package-archive</p>
+<p>DED文件(IPHONE)</p>
+<p>.apk</p>
+<p>application/vnd.android.package-archive </p>
+<p>APK文件(安卓系统)</p>
+<p>.cab</p>
+<p>application/vnd.cab-com-archive </p>
+<p>CAB文件(Windows Mobile)</p>
+<p>.xap</p>
+<p>application/x-silverlight-app </p>
+<p>XAP文件(Windows Phone 7)</p>
+<p>.sis</p>
+<p>application/vnd.symbian.install-archive</p>
+<p>SIS文件(symbian平台)</p>
+<p>.jar </p>
+<p>application/java-archive</p>
+<p>JAR文件(JAVA平台手机通用格式)</p>
+<p>.jad</p>
+<p>text/vnd.sun.j2me.app-descriptor</p>
+<p>JAD文件(JAVA平台手机通用格式)</p>
+<p>.sisx </p>
+<p>application/vnd.symbian.epoc/x-sisx-app </p>
+<p>SISX文件(symbian平台)</p>
+<p>2、URI<br>        URI（Uniform Resource Identifier，统一资源标识符)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对网络中（一般指万维网）的资源通过特定的协议进行交互操作。</p>
+<pre><code>    URI的格式如下：
+
+
+
+    使用 http: 或 https: 等协议方案名获取访问资源时要指定协议类型。不区分字母大小写，最后附一个冒号（:），也可使用 data: 或 javascript: 这类指定数据或脚本程序的方案名。</code></pre>
+<p>登录信息（认证）<br>        指定用户名和密码作为从服务器端获取资源时必要的登录信息（身份认证）。此项是可选项。<br>服务器地址<br>        使用绝对 URI 必须指定待访问的服务器地址。地址可以是类似hackr.jp 这种 DNS 可解析的名称，或是 192.168.1.1 这类 IPv4 地址名，还可以是 [0:0:0:0:0:0:0:1] 这样用方括号括起来的 IPv6 地址名。<br>服务器端口号<br>        指定服务器连接的网络端口号。此项也是可选项，若用户省略则自动使用默认端口号。<br>带层次的文件路径<br>        指定服务器上的文件路径来定位特指的资源。这与 UNIX 系统的文件目录结构相似。<br>查询字符串<br>        针对已指定的文件路径内的资源，可以使用查询字符串传入任意参数。此项可选。<br>片段标识符</p>
+<pre><code>    使用片段标识符通常可标记出已获取资源中的子资源（文档内的某个位置）。但在 RFC 中并没有明确规定其使用方法。该项也为可选项。
+
+    URI 可以进一步划分为定位符（URL），名称（URN）或两者兼备。URL 和 URN 都是 URI 子集。URN 如同一个人的名称，而 URL 代表一个人的住址。换言之，URN 定义某事物的身份，而 URL 提供查找该事物的方法。</code></pre>
+<p>3、URL<br>        URL(Uniform Resource Locator，统一资源定位符），最常见的形式是 URI,经常指定为非正式的网址。</p>
+<pre><code>   URL 是一种 URI，它标识一个互联网资源，并指定对其进行操作或获取该资源的方法。可能通过对主要访问手段的描述，也可能通过网络“位置”进行标识。例如，http://www.waylau.com 这个 URL，标识一个特定资源（首页）并表示该资源的某种形式（例如以编码字符表示的，首页的 HTML 代码）是可以通过 HTTP 协议从www.waylau.com 这个网络主机获得的。
+
+    大部分URL遵循一种标准格式，该格式包含三个部分：
+    第一部分：方案；说明了访问资源所使用的协议类型，通常为http协议：hhtp://
+    第二部分：地址；比如：www.baidu.com
+    第三部分：指定服务器上某个资源，比如：specisal/saw-blade.gif
+
+   现在几乎所有的URI都是URL了。</code></pre>
+<p>4、URN<br>       URN（Uniform Resource Name，统一资源名称），是URI的第二种形式，其目的是通过提供一种途径，用于在特定的命名空间资源的标识，以补充网址。</p>
+<pre><code>    URN 是基于某命名空间通过名称指定资源的URI。URN是作为特定内容的唯一名称使用的，与目前的资源所在地无关。使用这些与位置无关的URN，就可以将资源四处搬移。通过URN，还可以用同一个名字通过多种网络访问协议来访问资源。人们可以通过 URN 来指出某个资源，而无需指出其位置和获得方式。资源无需是基于互联网的。例如，URN urn:isbn:0-395-36341-1 指定标识系统（即国际标准书号ISBN）和某资源在该系统中的唯一表示的 URI。它可以允许人们在不指出其位置和获得方式的情况下谈论这本书。</code></pre>
+<p>三、HTTP事务<br>        一个HTTP事务是由一条请求命令和一个响应结果组成的。这种通信时通过http报文（HTTP message）的格式化数据块进行的。事务也可以理解为从客户端到服务器再到客户端，一次完整通信的过程。</p>
+<p>1、HTTP方法<br>        HTTP的不同的请求命令被称为HTTP方法。每条HTTP请求报文都包含一个方法。这个方法会告诉服务器执行什么动作。例如post，get等。</p>
+<pre><code>    具体的方法后面详细介绍。</code></pre>
+<p>2、状态码<br>        每条HTTP响应报文返回时都会携带一个状态码。状态码是一个三位数字的代码，告诉客户端请求是否成功，或者是否需要进行其他的动作。例如404，,500,200等。</p>
+<pre><code>    具体的状态码后面详细介绍。</code></pre>
+<p>3、一个web界面中可以包含多个对象<br>        应用程序完成一项任务时通常会发布多个事务。一个“Web页面”通常不是单个资源，而是一组资源的集合。</p>
+<p>四、报文<br>        HTTP报文是由一行一行的简单字符组成的，是由纯文本组成，不是二进制代码，所以方便人们进行读写。<br>        请求报文（request message）：从客户端发往服务器<br>        响应报文（response message）：从服务器发往客户端<br>        http报文包括以下三个部分：<br>        起始行：报文第一行，在请求报文里用来说明要做什么，在响应报文里说明出现了什么情况<br>        首部字段：位于起始行后面，有零个或者多个，每个首部字段都包含一个名字和一个值，便于解析，两者之间用冒号（：）隔开，首部之间以一个空行结束。<br>        主体：空行之后就是可选的报文主题。其中包含了所有类型的数据。请求主体中包括了要发送给Web服务器的数据，响应主体找那个装载了要返回给客户端的数据。主体中可以包含任何二进制数据，也可以包含文本。<br>        具体的报文内容在后面详细介绍。</p>
+<p>五、连接<br>1、TCP/IP<br>        http协议是位于整个数据传输通信的最上层应用层协议，不关注细节，负责通信细节的协议为传输层控制协议（Transmission Control Protocl,TCP）<br>        TCP特点：1）无差错的数据传输<br>                        2）按序传输（按照数据发送顺序到达服务器）<br>                        3）未分段的数据流（任意时刻任何大小将数据发出去）</p>
+<pre><code>    英特网是全世界计算机和网络设备最常用的层次化分组交换网络协议集，其隐藏了网络和硬件的特点和弱点，使各类型的计算机和网络都能进行可靠的通信。
+
+    关于TCP/IP的基础介绍，请参考https://blog.csdn.net/vikeyyyy/article/details/80568255</code></pre>
+<p>2、连接、IP地址及端口号<br>        HTTP客户端向服务器发送报文之前，需要用忘记协议（IP）地址和端口号在客户端和服务器之间建立一条TCP/IP连接。而IP和端口则是通过URL来获取。<br>        <a target="_blank" rel="noopener" href="http://207.200.83.29/index.html">http://207.200.83.29:80/index.html</a>  这个URL使用了机器的IP地址207.200.83.29，以及端口号80<br>        <a target="_blank" rel="noopener" href="http://www.netscape.com/index.html">http://www.netscape.com:80/index.html</a> 这个URL使用了文本形式的域名（主机名：IP地址比较人性化的别称）。通过域名服务（Domain Name Service，DNS）机制对主机名进行转换。<br>        <a target="_blank" rel="noopener" href="http://www.netscape.com/index.html">http://www.netscape.com/index.html</a>  这种情况一般默认端口号为80<br>        下图为浏览器通过http显示服务器中某个简单HTML资源的流程导图</p>
+<p>步骤如下:<br>1)浏览器从URL中解析出服务器主机名；<br>2）浏览器将主机名转换为服务器的IP地址；<br>3）浏览器将端口号（如果有）从URL中解析出来；<br>4）浏览器建立一条与服务器的连接TCP连接通道；<br>5）浏览器向服务器发送一条http请求报文；<br>6）服务器向浏览器发送一条http响应报文；<br>7）结束通信，关闭连接，浏览器显示具体资源；</p>
+<p>六、Web结构组件<br>        web的应用程序，除了浏览器和服务器之外，还有其他几个很重要的组件（简单介绍一下，后面详细介绍）<br>1、代理<br>        HTTP代理服务器是Web安全、应用集成以及性能优化的重要组成模块。</p>
+<p>2、缓存<br>        Web缓存(Web Cache)或代理缓存(proxy cache)是一种特殊的HTTP代理服务器，可以将经过代理传送的常用文档复制保存起来。下一个请求同一个文档的客户端就可以共用这个副本提供的服务。<br>        客户端从缓存下载文件户会比从远程服务器快很多。HTTP定义了很多功能，使得缓存更加高效，并规范了文档的新鲜度和缓存内容的隐私性。</p>
+<p>3、网关<br>        网关是一种特殊的服务器，作为其他服务器的中间实体使用。通常用于将HTTP流量转换成其他的协议，接受请求时就好像自己是资源的源服务器。</p>
+<p>4、隧道<br>        隧道是会在两条连接之间对原始数据进行盲转发的HTTP应用程序。<br>        HTTP隧道通常用来在一条或多条HTTP连接上转发非HTTP数据，转发时不会窥探数据。</p>
+<pre><code>    常见用途是通过HTTP连接承载加密的安全套接字层（SSL）流量，这样SSL流量就可以穿过只允许Web流量通过的防火墙。</code></pre>
+<p>5、Agent代理<br>        用户Agent代理是代表用户发起HTTP请求的客户端程序。所有发布Web请求的应用程序都是HTTP Agent代理，如Web浏览器。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/http/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mybaits" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/mybaits/">mybaits</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/mybaits/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MyBatis 简介<br>在我们传统的 JDBC 中，我们除了需要自己提供 SQL 外，还必须操作 Connection、Statment、ResultSet，不仅如此，为了访问不同的表，不同字段的数据，我们需要些很多雷同模板化的代码，闲的繁琐又枯燥。</p>
+<p>而我们在使用了 MyBatis 之后，只需要提供 SQL 语句就好了，其余的诸如：建立连接、操作 Statment、ResultSet，处理 JDBC 相关异常等等都可以交给 MyBatis 去处理，我们的关注点于是可以就此集中在 SQL 语句上，关注在增删改查这些操作层面上。</p>
+<p>并且 MyBatis 支持使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录。</p>
+<p>MyBatis环境配置<br>1、导入MyBatis jar包以及其核心包，MySQL驱动包</p>
+<pre><code> Eclipse中选择项目，右键 -&gt; New -&gt; Folder，新建一个名称为lib的文件夹，将需要的JAR文件拷贝到lib文件夹下。</code></pre>
+<p>2、写配置文件</p>
+<p>第一步：创建实体类</p>
+<p>在 Package【pojo】下新建实体类【user】，用于映射表 user：</p>
+<pre><code>public class User &#123;
+private String uid ;
+private String uname ;
+private String upassword;
+private String tel    ;
+private int superuser ;
+private int flag;
+/get set/</code></pre>
+<p>}<br>第二步：mybatis主配置文件</p>
+<configuration>
+
+<pre><code>&lt;environments default=&quot;development&quot;&gt;
+&lt;environment id=&quot;development&quot;&gt;
+    &lt;transactionManager type=&quot;JDBC&quot;/&gt;
+    &lt;!-- 数据库连接池 --&gt;
+        &lt;dataSource type=&quot;POOLED&quot;&gt;
+            &lt;property name=&quot;driver&quot; value=&quot;com.mysql.jdbc.Driver&quot; /&gt;
+            &lt;property name=&quot;url&quot;
+                value=&quot;jdbc:mysql://localhost:3306/film?characterEncoding=utf-8&quot; /&gt;
+            &lt;property name=&quot;username&quot; value=&quot;root&quot; /&gt;
+            &lt;property name=&quot;password&quot; value=&quot;123456&quot; /&gt;
+        &lt;/dataSource&gt;
+
+&lt;/environment&gt;
+&lt;/environments&gt;
+    &lt;mappers&gt; 
+        &lt;mapper resource=&quot;./com/lingnang/mapper/UserMapper.xml&quot;/&gt;
+    &lt;/mappers&gt;</code></pre>
+</configuration>
+
+
+<p> 第三步：编写usermapper接口</p>
+<p>public interface UserMapper {</p>
+<pre><code>User findUserById(String id);</code></pre>
+<p>}<br>第四步：配置文件userMapper</p>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.lingnang.dao.UserMapper">
+
+<pre><code>  &lt;!-- 根据Id查找 --&gt;    
+  &lt;select id=&quot;findUserById&quot; resultType=&quot;com.lingnang.pojo.User&quot; parameterType=&quot;String&quot;&gt;
+    select * from userr where uid = #&#123;id&#125;
+  &lt;/select&gt;</code></pre>
+  </mapper>
+第五步：创建userMapper接口
+
+
+<p>import com.lingnang.pojo.User;</p>
+<p>public interface UserMapper {</p>
+<pre><code>User findUserById(String id);</code></pre>
+<p>}<br>第六步：编写测试类</p>
+<p>package com.lingnang.Jutil;</p>
+<p>import java.io.IOException;<br>import java.io.InputStream;<br>import java.io.Reader;</p>
+<p>import org.apache.ibatis.io.Resources;<br>import org.apache.ibatis.session.SqlSession;<br>import org.apache.ibatis.session.SqlSessionFactory;<br>import org.apache.ibatis.session.SqlSessionFactoryBuilder;<br>import org.junit.Test;</p>
+<p>import com.lingnang.dao.UserMapper;<br>import com.lingnang.pojo.User;</p>
+<p>public class TestMybatis {</p>
+<p>  public static void main(String[] args) throws IOException {<br>            // 加载SqlMapConfig.xml配置文件<br>            InputStream inputStream = Resources.getResourceAsStream(“SqlMapConfig.xml”);</p>
+<pre><code>        // 创建SqlsessionFactory,相当于连接池
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        // 创建Sqlsession,连接相当于connection
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+
+        User user =userMapper.findUserById(&quot;u03&quot;);
+        System.out.println(user.getUname()+&quot; &quot;+user.getTel());</code></pre>
+<p>}<br>}</p>
+<p>测试结果</p>
+<p>工程目录截图</p>
+<p> 3、mybatis总体架构</p>
+<p>mybatis配置<br>          SqlMapConfig.xml，此文件作为mybatis的全局配置文件，配置了mybatis的运行环境等信息。</p>
+<pre><code>      mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语句。此文件需要在SqlMapConfig.xml中加载。</code></pre>
+<p>通过mybatis环境等配置信息构造SqlSessionFactory即会话工厂<br>由会话工厂创建sqlSession即会话，操作数据库需要通过sqlSession进行。<br>mybatis底层自定义了Executor执行器接口操作数据库，Executor接口有两个实现，一个是基本执行器、一个是缓存执行器。<br>Mapped Statement也是mybatis一个底层封装对象，它包装了mybatis配置信息及sql映射信息等。mapper.xml文件中一个sql对应一个Mapped Statement对象，sql的id即是Mapped statement的id。<br>Mapped Statement对sql执行输入参数进行定义，包括HashMap、基本类型、pojo，Executor通过Mapped Statement在执行sql前将输入的java对象映射至sql中，输入参数映射就是jdbc编程中对preparedStatement设置参数。<br>Mapped Statement对sql执行输出结果进行定义，包括HashMap、基本类型、pojo，Executor通过Mapped Statement在执行sql后将输出结果映射至java对象中，输出结果映射过程相当于jdbc编程中对结果的解析处理过程。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/mybaits/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-mysql索引" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/">mysql索引</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、索引<br>MySQL索引的建立对于MySQL的高效运行是很重要的，索引可以大大提高MySQL的检索速度。</p>
+<p>打个比方，如果合理的设计且使用索引的MySQL是一辆兰博基尼的话，那么没有设计和使用索引的MySQL就是一个人力三轮车。</p>
+<p>索引分单列索引和组合索引。单列索引，即一个索引只包含单个列，一个表可以有多个单列索引，但这不是组合索引。组合索引，即一个索引包含多个列。</p>
+<p>创建索引时，你需要确保该索引是应用在 SQL 查询语句的条件(一般作为 WHERE 子句的条件)。</p>
+<p>实际上，索引也是一张表，该表保存了主键与索引字段，并指向实体表的记录。</p>
+<p>上面都在说使用索引的好处，但过多的使用索引将会造成滥用。因此索引也会有它的缺点：虽然索引大大提高了查询速度，同时却会降低更新表的速度，如对表进行INSERT、UPDATE和DELETE。因为更新表时，MySQL不仅要保存数据，还要保存一下索引文件。</p>
+<p>建立索引会占用磁盘空间的索引文件。</p>
+<p>二、索引类型<br>Mysql目前主要有以下几种索引类型：FULLTEXT，HASH，BTREE，RTREE。</p>
+<ol>
+<li>FULLTEXT<br>即为全文索引，目前只有MyISAM引擎支持。其可以在CREATE TABLE ，ALTER TABLE ，CREATE INDEX 使用，不过目前只有 CHAR、VARCHAR ，TEXT 列上可以创建全文索引。</li>
+</ol>
+<p>全文索引并不是和MyISAM一起诞生的，它的出现是为了解决WHERE name LIKE “%word%”这类针对文本的模糊查询效率较低的问题。</p>
+<ol start="2">
+<li>HASH<br>由于HASH的唯一（几乎100%的唯一）及类似键值对的形式，很适合作为索引。</li>
+</ol>
+<p>HASH索引可以一次定位，不需要像树形索引那样逐层查找,因此具有极高的效率。但是，这种高效是有条件的，即只在“=”和“in”条件下高效，对于范围查询、排序及组合索引仍然效率不高。</p>
+<ol start="3">
+<li><p>BTREE<br>BTREE索引就是一种将索引值按一定的算法，存入一个树形的数据结构中（二叉树），每次查询都是从树的入口root开始，依次遍历node，获取leaf。这是MySQL里默认和最常用的索引类型。</p>
+</li>
+<li><p>RTREE<br>RTREE在MySQL很少使用，仅支持geometry数据类型，支持该类型的存储引擎只有MyISAM、BDb、InnoDb、NDb、Archive几种。</p>
+</li>
+</ol>
+<p>相对于BTREE，RTREE的优势在于范围查找。</p>
+<p>ps. 此段详细内容见此片博文：Mysql几种索引类型的区别及适用情况</p>
+<p>三、索引种类<br>普通索引：仅加速查询</p>
+<p>唯一索引：加速查询 + 列值唯一（可以有null）</p>
+<p>主键索引：加速查询 + 列值唯一（不可以有null）+ 表中只有一个</p>
+<p>组合索引：多列值组成一个索引，专门用于组合搜索，其效率大于索引合并</p>
+<p>全文索引：对文本的内容进行分词，进行搜索</p>
+<p>ps.</p>
+<p>索引合并，使用多个单列索引组合搜索<br>覆盖索引，select的数据列只用从索引中就能够取得，不必读取数据行，换句话说查询列要被所建的索引覆盖</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-spring学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/">bean生命周期</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code>                                  bean生命周期</code></pre>
+<p>1.Spring对Bean进行实例化（相当于程序中的new Xx()）</p>
+<p>2.Spring将值和Bean的引用注入进Bean对应的属性中</p>
+<p>3.如果Bean实现了BeanNameAware接口，Spring将Bean的ID传递给setBeanName()方法<br>（实现BeanNameAware清主要是为了通过Bean的引用来获得Bean的ID，一般业务中是很少有用到Bean的ID的）</p>
+<p>4.如果Bean实现了BeanFactoryAware接口，Spring将调用setBeanDactory(BeanFactory bf)方法并把BeanFactory容器实例作为参数传入。<br>（实现BeanFactoryAware 主要目的是为了获取Spring容器，如Bean通过Spring容器发布事件等）</p>
+<p>5.如果Bean实现了ApplicationContextAwaer接口，Spring容器将调用setApplicationContext()方法，把bean所在的应用上下文的引用传入.<br>(作用与BeanFactory类似都是为了获取Spring容器，不同的是Spring容器在调用setApplicationContext方法时会把它自己作为setApplicationContext 的参数传入，而Spring容器在调用setBeanDactory前需要程序员自己指定（注入）setBeanDactory里的参数BeanFactory )</p>
+<p>6.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessBeforeInitialization（预初始化）方法<br>（作用是在Bean实例创建成功后对进行增强处理，如对Bean进行修改，增加某个功能）</p>
+<p>7.如果Bean实现了InitializingBean接口，Spring将调用它们的afterPropertiesSet方法，作用与在配置文件中对Bean使用init-method声明初始化的作用一样，都是在Bean的全部属性设置成功后执行的初始化方法。</p>
+<p>8.如果Bean实现了BeanPostProcess接口，Spring将调用它们的postProcessAfterInitialization（后初始化）方法（作用与6的一样，只不过6是在Bean初始化前执行的，而这个是在Bean初始化后执行的，时机不同 )</p>
+<p>9.此时，bean已经准备就绪，可以被程序使用了，Bean将一直驻留在应用上下文中给应用使用，直到应用上下文被销毁</p>
+<p>10.如果Bean实现了DispostbleBean接口，Spring将调用它的destory方法，作用与在配置文件中对Bean使用destory-method属性的作用一样，都是在Bean实例销毁前执行的方法。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-我的第一篇博客" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">我的第一篇博客</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>2020年已经到来，今年定个小目标，开始写博客， 把从事开发工作以来，<br>自己总结的技术心得与大家做一个分享，希望大家多交流。<br>一起学习吧！！！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>算法一：快速排序法<br>      快速排序是由东尼·霍尔所发展的一种排序算法。在平均状况下，排序 n 个项目要Ο(n log n)次比较。在最坏状况下则需要Ο(n2)次比较，但这种状况并不常见。事实上，快速排序通常明显比其他Ο(n log n) 算法更快，因为它的内部循环（inner loop）可以在大部分的架构上很有效率地被实现出来。</p>
+<p>快速排序使用分治法（Divide and conquer）策略来把一个串行（list）分为两个子串行（sub-lists）。</p>
+<p>算法步骤：                  </p>
+<p>1 .从数列中挑出一个元素，称为 “基准”（pivot），</p>
+<ol start="2">
+<li><p>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。</p>
+</li>
+<li><p>递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。</p>
+</li>
+</ol>
+<p>递归的最底部情形，是数列的大小是零或一，也就是永远都已经被排序好了。虽然一直递归下去，但是这个算法总会退出，因为在每次的迭代（iteration）中，它至少会把一个元素摆到它最后的位置去。</p>
+<p>算法二：堆排序算法<br> 堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。</p>
+<p>堆排序的平均时间复杂度为Ο(nlogn) 。</p>
+<p>算法步骤：</p>
+<p>1.创建一个堆H[0..n-1] </p>
+<p>2.把堆首（最大值）和堆尾互换</p>
+<ol start="3">
+<li><p>把堆的尺寸缩小1，并调用shift_down(0),目的是把新的数组顶端数据调整到相应位置</p>
+</li>
+<li><p>重复步骤2，直到堆的尺寸为1</p>
+</li>
+</ol>
+<p>算法三：归并排序<br> 归并排序（Merge sort，台湾译作：合并排序）是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。</p>
+<p>算法步骤：</p>
+<ol>
+<li><p>申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列</p>
+</li>
+<li><p>设定两个指针，最初位置分别为两个已经排序序列的起始位置</p>
+</li>
+<li><p>比较两个指针所指向的元素，选择相对小的元素放入到合并空间，并移动指针到下一位置</p>
+</li>
+<li><p>重复步骤3直到某一指针达到序列尾</p>
+</li>
+<li><p>将另一序列剩下的所有元素直接复制到合并序列尾</p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
@@ -318,6 +1248,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">spring</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>

@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2020/8 | Hexo</title>
+  <title>redis | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2020/08/index.html">
+  <meta name="description" content="1.Redis的数据结构：redis存储的是key，value格式的数据，其中key都是字符串，value有5中不同的数据结构 value的数据结构：object encoding key 查看key的编码 1）字符串类型string ：value最大512M set key value  get key  del key 成功返回1 失败返回0 STRLEN key 返回 是 value的字节数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis">
+<meta property="og:url" content="http://yoursite.com/2020/08/10/redis/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.Redis的数据结构：redis存储的是key，value格式的数据，其中key都是字符串，value有5中不同的数据结构 value的数据结构：object encoding key 查看key的编码 1）字符串类型string ：value最大512M set key value  get key  del key 成功返回1 失败返回0 STRLEN key 返回 是 value的字节数">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-10T11:43:03.000Z">
+<meta property="article:modified_time" content="2020-08-10T12:45:41.211Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -150,317 +154,301 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-redis" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      redis
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/redis/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1.Redis的数据结构：redis存储的是key，value格式的数据，其中key都是字符串，value有5中不同的数据结构</p>
+<p>value的数据结构：object encoding key 查看key的编码</p>
+<p>1）字符串类型string ：value最大512M</p>
+<p>set key value </p>
+<p>get key </p>
+<p>del key 成功返回1 失败返回0</p>
+<p>STRLEN key 返回 是 value的字节数。字节数跟编码有关。</p>
+<p>APPEND Key value</p>
+<p>INCR /DECR可以对 数值进行 数值操作</p>
+<p>setbit key offset value(0或1)  设置key的二进制从左往右偏移offset 位 并设置为 value</p>
+<p>bitcount key start end （start  和end 为开始和结束的字节下标索引）  ： 统计key的value 的 start 到end 的 1 的个数 。end 可以为-1 。 0 到 -1 为统计所有字节。</p>
+<p>bittop and key3 key1 key2 :二进制的与操作。把key1和key2按位与后的结果放在key3里。 or是或操作。</p>
+<p>PSETEX key milliseconds value  以毫秒为单位设置过期时间</p>
+<p>SETEX key seconds value 以秒为单位设置过期时间</p>
+<p>但其编码方式可以是int、raw或者embstr，区别在于内存结构的不同</p>
+<p>int：字符串保存的是整数值，并且这个正式可以用long类型来表示，那么其就会直接保存在redisObject的ptr属性里，并将编码设置为int</p>
+<p>raw：字符串保存的大于32字节的字符串值，则使用简单动态字符串（SDS）结构，并将编码设置为raw，此时内存结构与SDS结构一致，内存分配次数为两次，创建redisObject对象和sdshdr结构</p>
+<p>embstr：字符串保存的小于等于32字节的字符串值，使用的也是简单的动态字符串（SDS结构），但是内存结构做了优化，用于保存顿消的字符串；内存分配也只需要一次就可完成，分配一块连续的空间即可，</p>
+<p>在Redis中，存储long、double类型的浮点数是先转换为字符串再进行存储的。<br>raw与embstr编码效果是相同的，不同在于内存分配与释放，raw两次，embstr一次。<br>embstr内存块连续，能更好的利用缓存在来的优势<br>int编码和embstr编码如果做追加字符串等操作，满足条件下会被转换为raw编码；embstr编码的对象是只读的，一旦修改会先转码到raw<br>2）哈希类型 hash  map格式  ：</p>
+<p>hset  key field value： field value 为 hashmap的键值。</p>
+<p>hget key field</p>
+<p>hgetall key 获取指定key的所有filed和value</p>
+<p>hdel key field</p>
+<p>ziplist和hashtable编码</p>
+<p>ziplist编码的哈希对象底层实现是压缩列表，在ziplist编码的哈希对象中，key-value键值对是以紧密相连的方式放入压缩链表的，先把key放入表尾，再放入value；键值对总是向表尾添加。</p>
+<p>hashtable编码的哈希对象底层实现是字典，哈希对象中的每个key-value对都使用一个字典键值对来保存。</p>
+<p>哈希对象使用ziplist编码需要满足两个条件：一是所有键值对的键和值的字符串长度都小于64字节；二是键值对数量小于512个；不满足任意一个都使用hashtable编码。</p>
+<p>3）列表类型 list ：底层是双向链表，可以用做栈和队列。</p>
+<p>Redis列表是简单的字符串列表，按照插入顺序排序。你可以添加一个元素导列表的头部（左边）或者尾部（右边）</p>
+<p>lpush（从列表左边添加）lpush key value</p>
+<p>rpush (从列表右边添加) rpush key value </p>
+<p>lrange key start end 范围获取 查看所有 范围从0 到 -1</p>
+<p>lpop 删除列表最左边的元素并返回， lpop key</p>
+<p>rpop 删除列表最又边的元素并返回， lpop key</p>
+<p>lindex key index 获取列表对应索引的元素。</p>
+<p>列表对象的编码可以是ziplist和linkedlist之一。</p>
+<p>linkedlist编码底层采用双端链表实现，每个双端链表节点都保存了一个字符串对象，在每个字符串对象内保存了一个列表元素。</p>
+<p>列表对象使用ziplist编码需要满足两个条件：一是所有字符串长度都小于64字节，二是元素数量小于512，不满足任意一个都会使用linkedlist编码。</p>
+<p>两个条件的数字可以在Redis的配置文件中修改，list-max-ziplist-value选项和list-max-ziplist-entries选项。</p>
+<p>4）集合类型 set 不允许重复值（不推荐使用），需要用数据太多，比如下面的srandmember操作需要随机 ，阻塞带宽。</p>
+<p>sadd key value 存储  成功返回1 失败返回0</p>
+<p>smembers key 获取set中的所有元素</p>
+<p>srem key value 删除集合中的某个元素</p>
+<p>srandmember key n: 如果n为整数，随机获取n个不重复元素，如果大于集合个数，那就返回所有元素。如果n小于0.那么返回可以重复元素，如果abs（n）大于元素个数仍然可以返回随机的n个可以重复元素。</p>
+<p>sunion key1 key2 交集</p>
+<p>sinter  key1 key2 并集</p>
+<p>sdiff key1 key2 差集  key1 key2谁在前取谁的差集</p>
+<p>intset和hashtable</p>
+<p>intset编码的集合对象底层实现是整数集合，所有元素都保存在整数集合中</p>
+<p>集合对象使用intset编码需要满足两个条件：一是所有元素都是整数值；二是元素个数小于等于512个；不满足任意一条都将使用hashtable编码。</p>
+<p>以上第二个条件可以在Redis配置文件中修改et-max-intset-entries选项</p>
+<p>5）有序集合类型sortedset ：不允许重复元素，且元素有序</p>
+<p>Redis 有序集合和集合一样也是string类型元素的集合,且不允许重复的成员。</p>
+<p>不同的是每个元素都会关联一个double类型的分数。redis正是通过分数来为集合中的成员进行从小到大的排序。</p>
+<p>有序集合的成员是唯一的,但分数(score)却可以重复。</p>
+<p>集合是通过哈希表实现的，所以添加，删除，查找的复杂度都是O(1)。 集合中最大的成员数为 2^32 - 1 (4294967295, 每个集合可存储40多亿个成员)。</p>
+<p>存储：zadd key score value  重复zadd会更新score  小的靠前</p>
+<p>获取：zrange key start end   0到-1为所有  zrange key 0 -1 withscores 并列出soce . 从小到大。</p>
+<p>zrevrange key start end 从大到小  zrevrange key 0 1  倒序取两个</p>
+<p>删除:  zrem key value </p>
+<p>ziplist编码 和skiplist编码</p>
+<p>skiplist编码的有序集合对象底层实现是跳跃表和字典两种；</p>
+<p>每个跳跃表节点都保存一个集合元素，并按分值从小到大排列；节点的object属性保存了元素的成员，score属性保存分值；</p>
+<p>字典的每个键值对保存一个集合元素，字典的键保存元素的成员，字典的值保存分值。</p>
+<p>为何skiplist编码要同时使用跳跃表和字典实现？</p>
+<p>跳跃表优点是有序，但是查询分值复杂度为O(logn)；字典查询分值复杂度为O(1) ，但是无序，所以结合连个结构的有点进行实现。<br>虽然采用两个结构但是集合的元素成员和分值是共享的，两种结构通过指针指向同一地址，不会浪费内存。<br>有序集合对象使用ziplist编码需要满足两个条件：一是所有元素长度小于64字节；二是元素个数小于128个；不满足任意一条件将使用skiplist编码。</p>
+<p>以上两个条件可以在Redis配置文件中修改zset-max-ziplist-entries选项和zset-max-ziplist-value选项</p>
+<p>总结：</p>
+<p>在Redis的五大数据对象中，string对象是唯一个可以被其他四种数据对象作为内嵌对象的；</p>
+<p>列表（list）、哈希（hash）、集合（set）、有序集合（zset）底层实现都用到了压缩列表结构，并且使用压缩列表结构的条件都是在元素个数比较少、字节长度较短的情况下；</p>
+<p>四种数据对象使用压缩列表的优点：</p>
+<p>（1）节约内存，减少内存开销，Redis是内存型数据库，所以一定情况下减少内存开销是非常有必要的。</p>
+<p>（2）减少内存碎片，压缩列表的内存块是连续的，并分配内存的次数一次即可。</p>
+<p>（3）压缩列表的新增、删除、查找操作的平均时间复杂度是O(N)，在N再一定的范围内，这个时间几乎是可以忽略的，并且N的上限值是可以配置的。</p>
+<p>（4）四种数据对象都有两种编码结构，灵活性增加。</p>
+<p>通用命令：</p>
+<p>keys * 查询所有的键 </p>
+<p>type key 获取键对应的value的类型 sortedset 为 zset。</p>
+<p>del key 删除指定的key value</p>
+<h1 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h1><p>redis是一个内存数据库，为了防止数据丢失，可以将内存中的数据持久化到硬盘的文件中。</p>
+<p>机制：</p>
+<p>1)RDB:默认机制，不需要配置。在一定的间隔内，检测key的变化情况，然后持久化数据。配置在 redis.windows.conf文件中</p>
+<p>save 900 1   -&gt;900s 只要只要有1个key改变就持久化一次。<br>save 300 10  -&gt;300s后 只要只要有10个key改变就持久化一次。<br>save 60 10000  -&gt; 60s后 只要只要有一个10000改变就持久化一次。</p>
+<p>修改 redis.windows.conf文件后 需要用命令行进入到 redis.windows.conf目录 然后用 redis-server.exe  redis.windows.conf 命令指定配置文件启动。 然后10秒内改变5次key 会触发持久化数据。 会在配置文件目录内生成一个dump.rdb 文件。</p>
+<p>2)AOF：日志记录的方式，可以记录每一条命令的操作，可以每一次命令后，持久化数据。</p>
+<p>1。修改redis.windows.conf文件中appendonly no -》appendonly yes 。修改后仍然要命令行形式指定配置文件，对应的持久化文件为appendonly.aof文件</p>
+<h1 id="appendfsync-always-每一次操作都进行持久化。"><a href="#appendfsync-always-每一次操作都进行持久化。" class="headerlink" title="appendfsync always  每一次操作都进行持久化。"></a>appendfsync always  每一次操作都进行持久化。</h1><p>appendfsync everysec 每隔1秒进行一次持久化。 </p>
+<h1 id="appendfsync-no-依赖操作系统内核，一直write，内核决定什么时候flush。（出问题丢的数据很多）"><a href="#appendfsync-no-依赖操作系统内核，一直write，内核决定什么时候flush。（出问题丢的数据很多）" class="headerlink" title="appendfsync no 依赖操作系统内核，一直write，内核决定什么时候flush。（出问题丢的数据很多）"></a>appendfsync no 依赖操作系统内核，一直write，内核决定什么时候flush。（出问题丢的数据很多）</h1><p>3）混合使用 利用RDB做快照，AOF做日志追加。</p>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><p>一般都整合使用。</p>
+<p>强一直性会先去同步到备，成功后才返回给用户成功，默认先返回成功再同步。</p>
+<p>分散压力模式下， 用户先把多个redis注册到槽位的不同段位里，用户连到redis，然后通过算法找到映射，如果不是本机，返回用户是哪个redis让用户去连。</p>
+<h1 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h1><p>Redis 事务可以一次执行多个命令， 并且带有以下三个重要的保证：</p>
+<p>批量操作在发送 EXEC 命令前被放入队列缓存。<br>收到 EXEC 命令后进入事务执行，事务中任意命令执行失败，其余的命令依然被执行。<br>在事务执行过程，其他客户端提交的命令请求不会插入到事务执行命令序列中。<br>它先以 MULTI 开始一个事务， 然后将多个命令入队到事务中， 最后由 EXEC 命令触发事务， 一并执行事务中的所有命令：</p>
+<p>一个事务从开始到执行会经历以下三个阶段：</p>
+<p>开始事务。<br>命令入队。<br>执行事务<br>以下是一个事务的例子</p>
+<p>redis 127.0.0.1:6379&gt; MULTI<br>OK</p>
+<p>redis 127.0.0.1:6379&gt; SET book-name “Mastering C++ in 21 days”<br>QUEUED</p>
+<p>redis 127.0.0.1:6379&gt; GET book-name<br>QUEUED</p>
+<p>redis 127.0.0.1:6379&gt; SADD tag “C++” “Programming” “Mastering Series”<br>QUEUED</p>
+<p>redis 127.0.0.1:6379&gt; SMEMBERS tag<br>QUEUED</p>
+<p>redis 127.0.0.1:6379&gt; EXEC</p>
+<ol>
+<li>OK</li>
+<li>“Mastering C++ in 21 days”</li>
+<li>(integer) 3</li>
+<li><ol>
+<li>“Mastering Series”</li>
+<li>“C++”</li>
+<li>“Programming”<br>单个 Redis 命令的执行是原子性的，但 Redis 没有在事务上增加任何维持原子性的机制，所以 Redis 事务的执行并不是原子性的。</li>
+</ol>
+</li>
+</ol>
+<p>事务可以理解为一个打包的批量执行脚本，但批量指令并非原子化的操作，中间某条指令的失败不会导致前面已做指令的回滚，也不会造成后续的指令不做。</p>
+<p>序号    命令及描述<br>1    DISCARD<br>取消事务，放弃执行事务块内的所有命令。<br>2    EXEC<br>执行所有事务块内的命令。<br>3    MULTI<br>标记一个事务块的开始。<br>4    UNWATCH<br>取消 WATCH 命令对所有 key 的监视。<br>5    WATCH key [key …]<br>监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。</p>
+<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>Redis是一种基于客户端-服务端模型以及请求/响应协议的TCP服务。这意味着通常情况下一个请求会遵循以下步骤：</p>
+<p>客户端向服务端发送一个查询请求，并监听Socket返回，通常是以阻塞模式，等待服务端响应。<br>服务端处理命令，并将结果返回给客户端。<br>Redis 管道技术可以在服务端未响应时，客户端可以继续向服务端发送请求，并最终一次性读取所有服务端的响应。</p>
+<p>$(echo -en “PING\r\n SET runoobkey redis\r\nGET runoobkey\r\nINCR visitor\r\nINCR visitor\r\nINCR visitor\r\n”; sleep 10) | nc localhost 6379</p>
+<p>+PONG<br>+OK<br>redis<br>:1<br>:2<br>:3<br>以上实例中我们通过使用 PING 命令查看redis服务是否可用，之后我们设置了 runoobkey 的值为 redis，然后我们获取 runoobkey 的值并使得 visitor 自增 3 次。<br>在返回的结果中我们可以看到这些命令一次性向 redis 服务提交，并最终一次性读取所有服务端的响应<br>管道技术最显著的优势是提高了 redis 服务的性能，开启管道后，我们的速度效率提升。</p>
+<h1 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h1><p>分区是分割数据到多个Redis实例的处理过程，因此每个实例只保存key的一个子集。</p>
+<p>分区的优势</p>
+<p>通过利用多台计算机内存的和值，允许我们构造更大的数据库。<br>通过多核和多台计算机，允许我们扩展计算能力；通过多台计算机和网络适配器，允许我们扩展网络带宽。<br>分区的不足</p>
+<p>redis的一些特性在分区方面表现的不是很好：</p>
+<p>涉及多个key的操作通常是不被支持的。举例来说，当两个set映射到不同的redis实例上时，你就不能对这两个set执行交集操作。<br>涉及多个key的redis事务不能使用。<br>当使用分区时，数据处理较为复杂，比如你需要处理多个rdb/aof文件，并且从多个实例和主机备份持久化文件。<br>增加或删除容量也比较复杂。redis集群大多数支持在运行时增加、删除节点的透明数据平衡的能力，但是类似于客户端分区、代理等其他系统则不支持这项特性。然而，一种叫做presharding的技术对此是有帮助的。<br>分区类型</p>
+<p>Redis 有两种类型分区。 假设有4个Redis实例 R0，R1，R2，R3，和类似user:1，user:2这样的表示用户的多个key，对既定的key有多种不同方式来选择这个key存放在哪个实例中。也就是说，有不同的系统来映射某个key到某个Redis服务。</p>
+<p>范围分区</p>
+<p>最简单的分区方式是按范围分区，就是映射一定范围的对象到特定的Redis实例。</p>
+<p>比如，ID从0到10000的用户会保存到实例R0，ID从10001到 20000的用户会保存到R1，以此类推。</p>
+<p>这种方式是可行的，并且在实际中使用，不足就是要有一个区间范围到实例的映射表。这个表要被管理，同时还需要各 种对象的映射表，通常对Redis来说并非是好的方法。</p>
+<p>哈希分区</p>
+<p>另外一种分区方法是hash分区。这对任何key都适用，也无需是object_name:这种形式，像下面描述的一样简单：</p>
+<p>用一个hash函数将key转换为一个数字，比如使用crc32 hash函数。对key foobar执行crc32(foobar)会输出类似93024922的整数。<br>对这个整数取模，将其转化为0-3之间的数字，就可以将这个整数映射到4个Redis实例中的一个了。93024922 % 4 = 2，就是说key foobar应该被存到R2实例中。注意：取模操作是取除的余数，通常在多种编程语言中用%操作符实现。</p>
+<h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><p>缓存穿透是指查询一个一定不存在的数据，由于缓存不命中，接着查询数据库也无法查询出结果，因此也不会写入到缓存中，这将会导致每个查询都会去请求数据库，造成缓存穿透；</p>
+<p>解决：</p>
+<p>用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。</p>
+<p>如果一个查询返回的数据为空，把这个空结果进行缓存，然后对这个数据设置过期时间，但它的过期时间会很短，比如60秒，最长不超过五分钟。</p>
+<p>待验证解决方案：设置两层redis层，不同的过期时间，检测ip攻击次数，封ip</p>
+<p>缓存雪崩<br>缓存雪崩是指，由于缓存层承载着大量请求，有效的保护了存储层，但是如果缓存层由于某些原因整体不能提供服务，于是所有的请求都会达到存储层，存储层的调用量会暴增，造成存储层也会挂掉的情况。</p>
+<p>解决：集群里的主从配置。访问进行限流。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/">HashMap和Hashtable的区别</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/08/10/redis/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/08/10/%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          查找算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/10/%E9%93%BE%E8%A1%A8%E5%9F%BA%E7%A1%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">链表</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/">数据库优化</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/NoSql/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/NoSql/">nosql</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/SpringAop/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/SpringAop/">AOP分析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/http/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/http/">http</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/mybaits/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/mybaits/">mybaits</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/">mysql索引</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/">bean生命周期</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">我的第一篇博客</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2020/08/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/08/page/2/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -484,8 +472,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

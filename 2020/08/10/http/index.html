@@ -6,13 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2020/8 | Hexo</title>
+  <title>http | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2020/08/index.html">
+  <meta name="description" content="一、Web页面生成原理        当我们在浏览器的地址栏中输入网址，然后点击回车，接着，浏览器就会呈现出我们需要的web界面，那么，这个界面是怎么产生的？web的界面是根据我们输入的URL（网址、地址），浏览器从服务器端获取对应的文件资源等信息，然后显示在浏览器上面。像这种通过发送请求获取服务器资源的web浏览器等，都可以称之为客户端（client）。     Web 使用一种名为 HTTP（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http">
+<meta property="og:url" content="http://yoursite.com/2020/08/10/http/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、Web页面生成原理        当我们在浏览器的地址栏中输入网址，然后点击回车，接着，浏览器就会呈现出我们需要的web界面，那么，这个界面是怎么产生的？web的界面是根据我们输入的URL（网址、地址），浏览器从服务器端获取对应的文件资源等信息，然后显示在浏览器上面。像这种通过发送请求获取服务器资源的web浏览器等，都可以称之为客户端（client）。     Web 使用一种名为 HTTP（">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-10T11:43:03.000Z">
+<meta property="article:modified_time" content="2020-08-10T12:33:39.051Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -150,317 +154,286 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-http" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      http
+    </h1>
+  
+
+        
+        <a href="/2020/08/10/http/" class="archive-article-date">
+  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、Web页面生成原理<br>        当我们在浏览器的地址栏中输入网址，然后点击回车，接着，浏览器就会呈现出我们需要的web界面，那么，这个界面是怎么产生的？web的界面是根据我们输入的URL（网址、地址），浏览器从服务器端获取对应的文件资源等信息，然后显示在浏览器上面。像这种通过发送请求获取服务器资源的web浏览器等，都可以称之为客户端（client）。</p>
+<pre><code>    Web 使用一种名为 HTTP（HyperText Transfer Protocol）的协议作为规范，完成从客户端到服务器端等一系列运作流程。而协议是指规则的约定。可以说，Web 是建立在 HTTP 协议上通信的。
+
+    HTTP使用的是可靠的数据传输协议，因此即使数据来自地球的另一端，它也能确保数据在传输的过程中不会被损坏或产生混乱，用户在访问信息的时候不用担心其完整性。</code></pre>
+<p>二、Web资源<br>1、MIME类型<br>        网络上有着数千种不同的数据类型，HTTP仔细地给每种要通过Web传输的对象都打上了名为MIME类型的数据格式标签。<br>        MIME(Multipurpose Internet Mail Extensions)多用途互联网邮件扩展类型。是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展名文件被访问的时候，浏览器会自动使用指定应用程序来打开。<br>        MIME类型是一种文本标记，表示一种主要的对象类型和一个特殊的子类型，中间由一条斜杠分隔。例如：HTML格式的文本文档是text/html，GIF格式的图片是image/gif<br>        当Web浏览器从服务器中取回一个对象时，会去查看相关的MIME类型，看看是否知道如何处理这个对象，大多数浏览器都可以处理数百种常见的对象类型，或者运行外部插件软件来处理特殊格式的数据。<br>        常用Mime类型：</p>
+<p>文件后缀</p>
+<p>Mime类型</p>
+<p>说明</p>
+<p>.flv</p>
+<p>flv/flv-flash </p>
+<p>在线播放</p>
+<p>.html或.htm </p>
+<p>text/html </p>
+<p>超文本标记语言文本</p>
+<p>.rtf </p>
+<p>application/rtf</p>
+<p>RTF文本</p>
+<p>.gif </p>
+<p>image/gif</p>
+<p>GIF图形</p>
+<p>.jpeg或.jpg </p>
+<p>image/jpeg</p>
+<p>JPEG图形</p>
+<p>.au</p>
+<p>audio/basic </p>
+<p>au声音文件</p>
+<p>.mid或.midi</p>
+<p>audio/midi或audio/x-midi</p>
+<p>MIDI音乐文件</p>
+<p>.ra或.ram或.rm </p>
+<p>audio/x-pn-realaudio</p>
+<p>RealAudio音乐文件</p>
+<p>.mpg或.mpeg或.mp3 </p>
+<p>video/mpeg</p>
+<p>MPEG文件</p>
+<p>.avi </p>
+<p>video/x-msvideo</p>
+<p>AVI文件</p>
+<p>.gz</p>
+<p>application/x-gzip</p>
+<p>GZIP文件</p>
+<p>.tar</p>
+<p>application/x-tar </p>
+<p>TAR文件</p>
+<p>.exe </p>
+<p>application/octet-stream</p>
+<p>下载文件类型</p>
+<p>.rmvb </p>
+<p>video/vnd.rn-realvideo </p>
+<p>在线播放</p>
+<p>.txt </p>
+<p>text/plain</p>
+<p>普通文本</p>
+<p>.mrp </p>
+<p>application/octet-stream </p>
+<p>MRP文件（国内普遍的手机）</p>
+<p>.ipa</p>
+<p>application/iphone-package-archive</p>
+<p>IPA文件(IPHONE)</p>
+<p>.deb </p>
+<p>application/x-debian-package-archive</p>
+<p>DED文件(IPHONE)</p>
+<p>.apk</p>
+<p>application/vnd.android.package-archive </p>
+<p>APK文件(安卓系统)</p>
+<p>.cab</p>
+<p>application/vnd.cab-com-archive </p>
+<p>CAB文件(Windows Mobile)</p>
+<p>.xap</p>
+<p>application/x-silverlight-app </p>
+<p>XAP文件(Windows Phone 7)</p>
+<p>.sis</p>
+<p>application/vnd.symbian.install-archive</p>
+<p>SIS文件(symbian平台)</p>
+<p>.jar </p>
+<p>application/java-archive</p>
+<p>JAR文件(JAVA平台手机通用格式)</p>
+<p>.jad</p>
+<p>text/vnd.sun.j2me.app-descriptor</p>
+<p>JAD文件(JAVA平台手机通用格式)</p>
+<p>.sisx </p>
+<p>application/vnd.symbian.epoc/x-sisx-app </p>
+<p>SISX文件(symbian平台)</p>
+<p>2、URI<br>        URI（Uniform Resource Identifier，统一资源标识符)是一个用于标识某一互联网资源名称的字符串。 该种标识允许用户对网络中（一般指万维网）的资源通过特定的协议进行交互操作。</p>
+<pre><code>    URI的格式如下：
+
+
+
+    使用 http: 或 https: 等协议方案名获取访问资源时要指定协议类型。不区分字母大小写，最后附一个冒号（:），也可使用 data: 或 javascript: 这类指定数据或脚本程序的方案名。</code></pre>
+<p>登录信息（认证）<br>        指定用户名和密码作为从服务器端获取资源时必要的登录信息（身份认证）。此项是可选项。<br>服务器地址<br>        使用绝对 URI 必须指定待访问的服务器地址。地址可以是类似hackr.jp 这种 DNS 可解析的名称，或是 192.168.1.1 这类 IPv4 地址名，还可以是 [0:0:0:0:0:0:0:1] 这样用方括号括起来的 IPv6 地址名。<br>服务器端口号<br>        指定服务器连接的网络端口号。此项也是可选项，若用户省略则自动使用默认端口号。<br>带层次的文件路径<br>        指定服务器上的文件路径来定位特指的资源。这与 UNIX 系统的文件目录结构相似。<br>查询字符串<br>        针对已指定的文件路径内的资源，可以使用查询字符串传入任意参数。此项可选。<br>片段标识符</p>
+<pre><code>    使用片段标识符通常可标记出已获取资源中的子资源（文档内的某个位置）。但在 RFC 中并没有明确规定其使用方法。该项也为可选项。
+
+    URI 可以进一步划分为定位符（URL），名称（URN）或两者兼备。URL 和 URN 都是 URI 子集。URN 如同一个人的名称，而 URL 代表一个人的住址。换言之，URN 定义某事物的身份，而 URL 提供查找该事物的方法。</code></pre>
+<p>3、URL<br>        URL(Uniform Resource Locator，统一资源定位符），最常见的形式是 URI,经常指定为非正式的网址。</p>
+<pre><code>   URL 是一种 URI，它标识一个互联网资源，并指定对其进行操作或获取该资源的方法。可能通过对主要访问手段的描述，也可能通过网络“位置”进行标识。例如，http://www.waylau.com 这个 URL，标识一个特定资源（首页）并表示该资源的某种形式（例如以编码字符表示的，首页的 HTML 代码）是可以通过 HTTP 协议从www.waylau.com 这个网络主机获得的。
+
+    大部分URL遵循一种标准格式，该格式包含三个部分：
+    第一部分：方案；说明了访问资源所使用的协议类型，通常为http协议：hhtp://
+    第二部分：地址；比如：www.baidu.com
+    第三部分：指定服务器上某个资源，比如：specisal/saw-blade.gif
+
+   现在几乎所有的URI都是URL了。</code></pre>
+<p>4、URN<br>       URN（Uniform Resource Name，统一资源名称），是URI的第二种形式，其目的是通过提供一种途径，用于在特定的命名空间资源的标识，以补充网址。</p>
+<pre><code>    URN 是基于某命名空间通过名称指定资源的URI。URN是作为特定内容的唯一名称使用的，与目前的资源所在地无关。使用这些与位置无关的URN，就可以将资源四处搬移。通过URN，还可以用同一个名字通过多种网络访问协议来访问资源。人们可以通过 URN 来指出某个资源，而无需指出其位置和获得方式。资源无需是基于互联网的。例如，URN urn:isbn:0-395-36341-1 指定标识系统（即国际标准书号ISBN）和某资源在该系统中的唯一表示的 URI。它可以允许人们在不指出其位置和获得方式的情况下谈论这本书。</code></pre>
+<p>三、HTTP事务<br>        一个HTTP事务是由一条请求命令和一个响应结果组成的。这种通信时通过http报文（HTTP message）的格式化数据块进行的。事务也可以理解为从客户端到服务器再到客户端，一次完整通信的过程。</p>
+<p>1、HTTP方法<br>        HTTP的不同的请求命令被称为HTTP方法。每条HTTP请求报文都包含一个方法。这个方法会告诉服务器执行什么动作。例如post，get等。</p>
+<pre><code>    具体的方法后面详细介绍。</code></pre>
+<p>2、状态码<br>        每条HTTP响应报文返回时都会携带一个状态码。状态码是一个三位数字的代码，告诉客户端请求是否成功，或者是否需要进行其他的动作。例如404，,500,200等。</p>
+<pre><code>    具体的状态码后面详细介绍。</code></pre>
+<p>3、一个web界面中可以包含多个对象<br>        应用程序完成一项任务时通常会发布多个事务。一个“Web页面”通常不是单个资源，而是一组资源的集合。</p>
+<p>四、报文<br>        HTTP报文是由一行一行的简单字符组成的，是由纯文本组成，不是二进制代码，所以方便人们进行读写。<br>        请求报文（request message）：从客户端发往服务器<br>        响应报文（response message）：从服务器发往客户端<br>        http报文包括以下三个部分：<br>        起始行：报文第一行，在请求报文里用来说明要做什么，在响应报文里说明出现了什么情况<br>        首部字段：位于起始行后面，有零个或者多个，每个首部字段都包含一个名字和一个值，便于解析，两者之间用冒号（：）隔开，首部之间以一个空行结束。<br>        主体：空行之后就是可选的报文主题。其中包含了所有类型的数据。请求主体中包括了要发送给Web服务器的数据，响应主体找那个装载了要返回给客户端的数据。主体中可以包含任何二进制数据，也可以包含文本。<br>        具体的报文内容在后面详细介绍。</p>
+<p>五、连接<br>1、TCP/IP<br>        http协议是位于整个数据传输通信的最上层应用层协议，不关注细节，负责通信细节的协议为传输层控制协议（Transmission Control Protocl,TCP）<br>        TCP特点：1）无差错的数据传输<br>                        2）按序传输（按照数据发送顺序到达服务器）<br>                        3）未分段的数据流（任意时刻任何大小将数据发出去）</p>
+<pre><code>    英特网是全世界计算机和网络设备最常用的层次化分组交换网络协议集，其隐藏了网络和硬件的特点和弱点，使各类型的计算机和网络都能进行可靠的通信。
+
+    关于TCP/IP的基础介绍，请参考https://blog.csdn.net/vikeyyyy/article/details/80568255</code></pre>
+<p>2、连接、IP地址及端口号<br>        HTTP客户端向服务器发送报文之前，需要用忘记协议（IP）地址和端口号在客户端和服务器之间建立一条TCP/IP连接。而IP和端口则是通过URL来获取。<br>        <a target="_blank" rel="noopener" href="http://207.200.83.29/index.html">http://207.200.83.29:80/index.html</a>  这个URL使用了机器的IP地址207.200.83.29，以及端口号80<br>        <a target="_blank" rel="noopener" href="http://www.netscape.com/index.html">http://www.netscape.com:80/index.html</a> 这个URL使用了文本形式的域名（主机名：IP地址比较人性化的别称）。通过域名服务（Domain Name Service，DNS）机制对主机名进行转换。<br>        <a target="_blank" rel="noopener" href="http://www.netscape.com/index.html">http://www.netscape.com/index.html</a>  这种情况一般默认端口号为80<br>        下图为浏览器通过http显示服务器中某个简单HTML资源的流程导图</p>
+<p>步骤如下:<br>1)浏览器从URL中解析出服务器主机名；<br>2）浏览器将主机名转换为服务器的IP地址；<br>3）浏览器将端口号（如果有）从URL中解析出来；<br>4）浏览器建立一条与服务器的连接TCP连接通道；<br>5）浏览器向服务器发送一条http请求报文；<br>6）服务器向浏览器发送一条http响应报文；<br>7）结束通信，关闭连接，浏览器显示具体资源；</p>
+<p>六、Web结构组件<br>        web的应用程序，除了浏览器和服务器之外，还有其他几个很重要的组件（简单介绍一下，后面详细介绍）<br>1、代理<br>        HTTP代理服务器是Web安全、应用集成以及性能优化的重要组成模块。</p>
+<p>2、缓存<br>        Web缓存(Web Cache)或代理缓存(proxy cache)是一种特殊的HTTP代理服务器，可以将经过代理传送的常用文档复制保存起来。下一个请求同一个文档的客户端就可以共用这个副本提供的服务。<br>        客户端从缓存下载文件户会比从远程服务器快很多。HTTP定义了很多功能，使得缓存更加高效，并规范了文档的新鲜度和缓存内容的隐私性。</p>
+<p>3、网关<br>        网关是一种特殊的服务器，作为其他服务器的中间实体使用。通常用于将HTTP流量转换成其他的协议，接受请求时就好像自己是资源的源服务器。</p>
+<p>4、隧道<br>        隧道是会在两条连接之间对原始数据进行盲转发的HTTP应用程序。<br>        HTTP隧道通常用来在一条或多条HTTP连接上转发非HTTP数据，转发时不会窥探数据。</p>
+<pre><code>    常见用途是通过HTTP连接承载加密的安全套接字层（SSL）流量，这样SSL流量就可以穿过只允许Web流量通过的防火墙。</code></pre>
+<p>5、Agent代理<br>        用户Agent代理是代表用户发起HTTP请求的客户端程序。所有发布Web请求的应用程序都是HTTP Agent代理，如Web浏览器。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/HashMap%E5%92%8CHashtable%E7%9A%84%E5%8C%BA%E5%88%AB/">HashMap和Hashtable的区别</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/08/10/http/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2020/08/10/SpringAop/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          AOP分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/10/mybaits/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mybaits</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/MySQL%E4%BC%98%E5%8C%96/">数据库优化</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/NoSql/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/NoSql/">nosql</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/SpringAop/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/SpringAop/">AOP分析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/http/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/http/">http</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/mybaits/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/mybaits/">mybaits</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/mysql%E7%B4%A2%E5%BC%95/">mysql索引</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/spring%E5%AD%A6%E4%B9%A0/">bean生命周期</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">spring</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">我的第一篇博客</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2020-08-10T11:43:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/08/10/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/2020/08/page/2/">2</a><a class="extend next" rel="next" href="/archives/2020/08/page/2/">Next &amp;raquo;</a>
-    </nav>
   
 
 
@@ -484,8 +457,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
